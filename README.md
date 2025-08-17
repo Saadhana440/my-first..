@@ -1,1 +1,2 @@
 A sports management system DBMS project can be designed to efficiently manage information about teams and athletes. This system would involve storing details like player names, positions, contact information, team assignments, and performance statistics. The database would also track team information, including names, coaches, and match schedules. By using a database management system, data can be stored securely, accessed quickly, and analyzed for reporting and decision-making, streamlining the management of sports organizations. 
+.
