@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports System for Teams & Athletes</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #141E30, #243B55);
+      color: #fff;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      border-radius: 20px;
+      background: #00e6b8;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .tab:hover,
+    .tab.active {
+      background: #00cfa2;
+      color: #fff;
+    }
+
+    .section {
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
+    }
+
+    input, select {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      background: #00cfa2;
+      color: #000;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00bfa0;
+      color: #fff;
+    }
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #ffffff10;
+      border: 1px solid #ffffff30;
+      padding: 15px;
+      border-radius: 16px;
+      width: 220px;
+      box-shadow: 0 4px 12px #00000060;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      background: #ffffff20;
+    }
+
+    #loginScreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: radial-gradient(circle, #141E30, #0f2027);
+    }
+
+    .login-box {
+      background: #ffffff10;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px #00e6b880;
+      text-align: center;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-box input {
+      width: 90%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+
+    .error {
+      margin-top: 10px;
+      color: #ff4d4d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <h2>Login</h2>
+      <input type="text" id="loginUser" placeholder="Username" value="admin" />
+      <input type="password" id="loginPass" placeholder="Password" value="sports123" />
+      <button onclick="login()">Login</button>
+      <p id="loginError" class="error"></p>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" style="display: none;">
+    <h1>🏆 Sports System for Teams & Athletes</h1>
+
+    <div class="tabs">
+      <button onclick="switchTab('team')" class="tab" id="tab-team">Add Team</button>
+      <button onclick="switchTab('athlete')" class="tab" id="tab-athlete">Add Athlete</button>
+      <button onclick="switchTab('view')" class="tab" id="tab-view">View All</button>
+    </div>
+
+    <div id="team" class="section">
+      <h2>➕ Add Team</h2>
+      <input type="text" id="teamName" placeholder="Team Name" />
+      <input type="text" id="sportType" placeholder="Sport Type" />
+      <button onclick="addTeam()">Add Team</button>
+    </div>
+
+    <div id="athlete" class="section" style="display: none;">
+      <h2>👤 Add Athlete</h2>
+      <input type="text" id="athleteName" placeholder="Athlete Name" />
+      <input type="text" id="athleteSport" placeholder="Sport" />
+      <select id="athleteTeam">
+        <option value="">Select Team</option>
+      </select>
+      <button onclick="addAthlete()">Add Athlete</button>
+    </div>
+
+    <div id="view" class="section" style="display: none;">
+      <h2>📋 Teams</h2>
+      <div id="teamList" class="card-container"></div>
+      <h2>🏃 Athletes</h2>
+      <div id="athleteList" class="card-container"></div>
+    </div>
+  </div>
+
+  <script>
+    let teams = [];
+    let athletes = [];
+
+    function login() {
+      const user = document.getElementById("loginUser").value;
+      const pass = document.getElementById("loginPass").value;
+      if (user === "admin" && pass === "sports123") {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("app").style.display = "block";
+      } else {
+        document.getElementById("loginError").innerText = "❌ Invalid credentials.";
+      }
+    }
+
+    function switchTab(tab) {
+      ["team", "athlete", "view"].forEach(id => {
+        document.getElementById(id).style.display = "none";
+        document.getElementById(tab-${id}).classList.remove("active");
+      });
+      document.getElementById(tab).style.display = "block";
+      document.getElementById(tab-${tab}).classList.add("active");
+    }
+
+    function addTeam() {
+      const name = document.getElementById("teamName").value;
+      const sport = document.getElementById("sportType").value;
+      if (name && sport) {
+        teams.push({ name, sport });
+        document.getElementById("teamName").value = '';
+        document.getElementById("sportType").value = '';
+        updateTeamDropdown();
+        displayTeams();
+        alert("✅ Team added!");
+      }
+    }
+
+    function updateTeamDropdown() {
+      const dropdown = document.getElementById("athleteTeam");
+      dropdown.innerHTML = '<option value="">Select Team</option>';
+      teams.forEach(team => {
+        const option = document.createElement("option");
+        option.value = team.name;
+        option.text = team.name;
+        dropdown.appendChild(option);
+      });
+    }
+
+    function addAthlete() {
+      const name = document.getElementById("athleteName").value;
+      const sport = document.getElementById("athleteSport").value;
+      const team = document.getElementById("athleteTeam").value;
+      if (name && sport && team) {
+        athletes.push({ name, sport, team });
+        document.getElementById("athleteName").value = '';
+        document.getElementById("athleteSport").value = '';
+        document.getElementById("athleteTeam").value = '';
+        displayAthletes();
+        alert("✅ Athlete added!");
+      }
+    }
+
+    function displayTeams() {
+      const container = document.getElementById("teamList");
+      container.innerHTML = '';
+      teams.forEach(team => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = <h3>${team.name}</h3><p>Sport: ${team.sport}</p>;
+        container.appendChild(card);
+      });
+    }
+
+    function displayAthletes() {
+      const container = document.getElementById("athleteList");
+      container.innerHTML = '';
+      athletes.forEach(athlete => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = <h3>${athlete.name}</h3><p>Sport: ${athlete.sport}</p><p>Team: ${athlete.team}</p>;
+        container.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
